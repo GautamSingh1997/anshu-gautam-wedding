@@ -1439,7 +1439,12 @@
 </head>
 <body>
 
-    <!-- Background Music - Wedding Card (plays after intro) -->
+    <!-- First Audio - Ram Siya Ram -->
+    <audio id="introAudio">
+        <source src="ram-siya.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Background Music - Wedding Card (plays after Ram Siya) -->
     <audio id="bgMusic" loop>
         <source src="wedding-card.mp3" type="audio/mpeg">
     </audio>
@@ -1969,16 +1974,25 @@
         });
 
         // Music Control
+        const introAudio = document.getElementById('introAudio');
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
         let musicStarted = false;
+        let playingIntro = true;
 
-        // Try to play music
+        // When Ram Siya ends, play wedding music
+        introAudio.addEventListener('ended', () => {
+            playingIntro = false;
+            bgMusic.volume = 0.5;
+            bgMusic.play().catch(err => {});
+        });
+
+        // Try to play music (Ram Siya first)
         function startMusic() {
             if (musicStarted) return;
-            bgMusic.volume = 0.5;
-            bgMusic.play().then(() => {
+            introAudio.volume = 0.5;
+            introAudio.play().then(() => {
                 isPlaying = true;
                 musicStarted = true;
                 musicBtn.classList.add('playing');
@@ -2009,11 +2023,17 @@
 
         function toggleMusic() {
             if (isPlaying) {
+                introAudio.pause();
                 bgMusic.pause();
                 isPlaying = false;
                 musicBtn.classList.remove('playing');
             } else {
-                bgMusic.play();
+                // Resume appropriate audio
+                if (playingIntro && introAudio.currentTime < introAudio.duration) {
+                    introAudio.play();
+                } else {
+                    bgMusic.play();
+                }
                 isPlaying = true;
                 musicBtn.classList.add('playing');
             }
