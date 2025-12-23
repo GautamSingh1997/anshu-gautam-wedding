@@ -1437,6 +1437,226 @@
             display: block;
             text-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
         }
+
+        /* ============ FIREWORKS ON LOAD ============ */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            overflow: hidden;
+        }
+
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: firework-explode 1.5s ease-out forwards;
+        }
+
+        @keyframes firework-explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        .firework-trail {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: firework-rise 0.8s ease-out forwards;
+        }
+
+        @keyframes firework-rise {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px);
+                opacity: 0;
+            }
+        }
+
+        /* ============ CURSOR TRAIL EFFECT ============ */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+            font-size: 20px;
+            animation: cursor-fade 1s ease-out forwards;
+        }
+
+        @keyframes cursor-fade {
+            0% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) rotate(180deg) translateY(-30px);
+            }
+        }
+
+        /* ============ FLOATING G ❤️ A ============ */
+        .floating-names {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: var(--gold);
+            pointer-events: none;
+            z-index: 3;
+            opacity: 0.15;
+            white-space: nowrap;
+            animation: float-names 8s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(212, 168, 83, 0.5);
+        }
+
+        .floating-names .heart {
+            color: #ff6b6b;
+            display: inline-block;
+            animation: heart-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes float-names {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.15;
+            }
+            25% {
+                transform: translate(-40%, -60%) scale(1.1);
+                opacity: 0.25;
+            }
+            50% {
+                transform: translate(-60%, -40%) scale(1);
+                opacity: 0.2;
+            }
+            75% {
+                transform: translate(-50%, -55%) scale(1.05);
+                opacity: 0.18;
+            }
+        }
+
+        @keyframes heart-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* ============ FLOATING MANDALA ============ */
+        .floating-mandala {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            animation: mandala-float 30s linear infinite;
+        }
+
+        .floating-mandala svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .floating-mandala-1 {
+            width: 400px;
+            height: 400px;
+            top: 10%;
+            left: -100px;
+            animation-duration: 45s;
+        }
+
+        .floating-mandala-2 {
+            width: 300px;
+            height: 300px;
+            bottom: 20%;
+            right: -80px;
+            animation-duration: 35s;
+            animation-direction: reverse;
+        }
+
+        .floating-mandala-3 {
+            width: 250px;
+            height: 250px;
+            top: 60%;
+            left: 50%;
+            animation-duration: 40s;
+        }
+
+        @keyframes mandala-float {
+            0% {
+                transform: rotate(0deg) translateX(0) translateY(0);
+            }
+            25% {
+                transform: rotate(90deg) translateX(20px) translateY(-20px);
+            }
+            50% {
+                transform: rotate(180deg) translateX(0) translateY(0);
+            }
+            75% {
+                transform: rotate(270deg) translateX(-20px) translateY(20px);
+            }
+            100% {
+                transform: rotate(360deg) translateX(0) translateY(0);
+            }
+        }
+
+        /* ============ AUTO-SLIDESHOW INDICATOR ============ */
+        .slideshow-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .gallery-item.active-slide {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 168, 83, 0.6);
+        }
+
+        .auto-slideshow-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gold);
+            color: var(--primary-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .auto-slideshow-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(212, 168, 83, 0.4);
+        }
+
+        .auto-slideshow-btn.playing {
+            background: var(--primary);
+            color: var(--cream);
+        }
     </style>
 </head>
 <body>
@@ -1450,6 +1670,45 @@
     <audio id="bgMusic" loop>
         <source src="wedding-card.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Fireworks Container -->
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <!-- Floating Mandalas -->
+    <div class="floating-mandala floating-mandala-1" id="floatingMandala1">
+        <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="50" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <path d="M100,10 Q150,100 100,190 Q50,100 100,10" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <path d="M10,100 Q100,50 190,100 Q100,150 10,100" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <path d="M30,30 Q100,80 170,30 Q120,100 170,170 Q100,120 30,170 Q80,100 30,30" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        </svg>
+    </div>
+    <div class="floating-mandala floating-mandala-2" id="floatingMandala2">
+        <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <path d="M100,10 L100,190 M10,100 L190,100" fill="none" stroke="currentColor" stroke-width="0.3"/>
+            <path d="M30,30 L170,170 M170,30 L30,170" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        </svg>
+    </div>
+    <div class="floating-mandala floating-mandala-3" id="floatingMandala3">
+        <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="55" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            <ellipse cx="100" cy="100" rx="90" ry="40" fill="none" stroke="currentColor" stroke-width="0.3"/>
+            <ellipse cx="100" cy="100" rx="40" ry="90" fill="none" stroke="currentColor" stroke-width="0.3"/>
+        </svg>
+    </div>
+
+    <!-- Floating G ❤️ A -->
+    <div class="floating-names" id="floatingNames">
+        G <span class="heart">❤️</span> A
+    </div>
 
     <!-- Falling Flower Petals -->
     <div class="petals-container" id="petalsContainer"></div>
@@ -1582,7 +1841,7 @@
             
             <div class="couple-cards">
                 <div class="couple-card animate-on-scroll">
-                    <div class="icon">🤵🏻</div>
+                    <div class="icon">🤴🏻</div>
                     <h3 class="name">Gautam Singh</h3>
                     <p class="role">The Groom</p>
                     <div class="parents">
@@ -1594,11 +1853,11 @@
                 </div>
 
                 <div class="hearts-connector">
-                    💕 💍 💕
+                    💞 💍 💞
                 </div>
 
                 <div class="couple-card animate-on-scroll">
-                    <div class="icon">👰🏻</div>
+                    <div class="icon">👸🏻</div>
                     <h3 class="name">Anshu Singh</h3>
                     <p class="role">The Bride</p>
                     <div class="parents">
@@ -1629,13 +1888,13 @@
                 <!-- Side Cards for Haldi/Mehendi -->
                 <div class="side-cards-container">
                     <div class="side-card groom" onclick="toggleSideEvents('groom')">
-                        <div class="card-icon">🤵🏻</div>
+                        <div class="card-icon">🤴🏻</div>
                         <h3 class="card-name">Gautam</h3>
                         <p class="card-location">Dubhal, Gaya</p>
                         <p class="tap-hint"><span>👆</span> Tap for events</p>
                     </div>
                     <div class="side-card bride" onclick="toggleSideEvents('bride')">
-                        <div class="card-icon">👰🏻</div>
+                        <div class="card-icon">👸🏻</div>
                         <h3 class="card-name">Anshu</h3>
                         <p class="card-location">Madanpur</p>
                         <p class="tap-hint"><span>👆</span> Tap for events</p>
@@ -1734,6 +1993,9 @@
                 </div>
             </div>
             <p class="scroll-hint"><span>← Swipe to see more →</span></p>
+            <button class="auto-slideshow-btn" id="slideshowBtn" onclick="toggleSlideshow()">
+                <span id="slideshowIcon">▶️</span> Auto Slideshow
+            </button>
         </section>
 
         <!-- Lightbox Modal -->
@@ -1777,7 +2039,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <div class="hearts">❤️ 💕 ❤️</div>
+            <div class="hearts">❤️ 💞 ❤️</div>
             <h2 class="couple-names-footer">Gautam & Anshu</h2>
             <p class="message">Thank you for being part of our special day</p>
             <p class="date-venue">
@@ -2143,6 +2405,162 @@
                 else changeSlide(-1);
             }
         });
+
+        // ============ FIREWORKS ON LOAD ============
+        function createFirework(x, y) {
+            const container = document.getElementById('fireworksContainer');
+            const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#FF69B4'];
+            const particleCount = 30;
+            
+            // Create explosion particles
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'firework';
+                const angle = (i / particleCount) * Math.PI * 2;
+                const velocity = 50 + Math.random() * 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                particle.style.cssText = `
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    --tx: ${tx}px;
+                    --ty: ${ty}px;
+                    box-shadow: 0 0 6px ${colors[Math.floor(Math.random() * colors.length)]};
+                `;
+                
+                container.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
+        }
+
+        function launchFireworks() {
+            const container = document.getElementById('fireworksContainer');
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            // Launch multiple fireworks
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * screenWidth * 0.8 + screenWidth * 0.1;
+                    const y = Math.random() * screenHeight * 0.5 + 50;
+                    
+                    // Rising trail
+                    const trail = document.createElement('div');
+                    trail.className = 'firework-trail';
+                    trail.style.left = x + 'px';
+                    trail.style.top = screenHeight + 'px';
+                    container.appendChild(trail);
+                    
+                    setTimeout(() => {
+                        trail.remove();
+                        createFirework(x, y);
+                    }, 800);
+                }, i * 400);
+            }
+        }
+
+        // Launch fireworks on page load
+        window.addEventListener('load', () => {
+            setTimeout(launchFireworks, 500);
+            // Second wave of fireworks
+            setTimeout(launchFireworks, 3000);
+        });
+
+        // ============ CURSOR TRAIL EFFECT ============
+        let lastTrailTime = 0;
+        const trailDelay = 50; // ms between trails
+        const trailEmojis = ['✨', '💫', '⭐', '🌟', '💖'];
+
+        document.addEventListener('touchmove', createCursorTrail);
+        document.addEventListener('mousemove', createCursorTrail);
+
+        function createCursorTrail(e) {
+            const now = Date.now();
+            if (now - lastTrailTime < trailDelay) return;
+            lastTrailTime = now;
+
+            const x = e.touches ? e.touches[0].clientX : e.clientX;
+            const y = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.innerHTML = trailEmojis[Math.floor(Math.random() * trailEmojis.length)];
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            document.body.appendChild(trail);
+
+            setTimeout(() => trail.remove(), 1000);
+        }
+
+        // ============ AUTO-SLIDESHOW ============
+        let slideshowInterval = null;
+        let slideshowActive = false;
+        let slideshowIndex = 0;
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const galleryContainer = document.querySelector('.gallery-scroll-container');
+
+        function toggleSlideshow() {
+            const btn = document.getElementById('slideshowBtn');
+            const icon = document.getElementById('slideshowIcon');
+            
+            if (slideshowActive) {
+                // Stop slideshow
+                clearInterval(slideshowInterval);
+                slideshowActive = false;
+                btn.classList.remove('playing');
+                icon.textContent = '▶️';
+                galleryItems.forEach(item => item.classList.remove('active-slide'));
+            } else {
+                // Start slideshow
+                slideshowActive = true;
+                btn.classList.add('playing');
+                icon.textContent = '⏸️';
+                slideshowIndex = 0;
+                runSlideshow();
+                slideshowInterval = setInterval(runSlideshow, 3000);
+            }
+        }
+
+        function runSlideshow() {
+            // Remove active from all
+            galleryItems.forEach(item => item.classList.remove('active-slide'));
+            
+            // Add active to current
+            if (galleryItems[slideshowIndex]) {
+                galleryItems[slideshowIndex].classList.add('active-slide');
+                
+                // Scroll to the item
+                const item = galleryItems[slideshowIndex];
+                const scrollLeft = item.offsetLeft - (galleryContainer.offsetWidth / 2) + (item.offsetWidth / 2);
+                galleryContainer.scrollTo({
+                    left: scrollLeft,
+                    behavior: 'smooth'
+                });
+                
+                // Open lightbox for better view
+                openLightbox(slideshowIndex);
+            }
+            
+            slideshowIndex++;
+            if (slideshowIndex >= galleryItems.length) {
+                slideshowIndex = 0;
+            }
+        }
+
+        // Stop slideshow when lightbox is closed manually
+        const originalCloseLightbox = closeLightbox;
+        closeLightbox = function() {
+            if (slideshowActive) {
+                clearInterval(slideshowInterval);
+                slideshowActive = false;
+                document.getElementById('slideshowBtn').classList.remove('playing');
+                document.getElementById('slideshowIcon').textContent = '▶️';
+                galleryItems.forEach(item => item.classList.remove('active-slide'));
+            }
+            originalCloseLightbox();
+        };
     </script>
 </body>
 </html>
