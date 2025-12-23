@@ -1032,6 +1032,33 @@
             opacity: 1;
         }
 
+        /* Intro Video Overlay */
+        .intro-video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .intro-video-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .intro-video-overlay video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         /* Sound Prompt */
         .sound-prompt {
             position: fixed;
@@ -1258,10 +1285,12 @@
     </style>
 </head>
 <body>
-    <!-- Intro Music (plays for 7 seconds on welcome) -->
-    <video id="introMusic" style="display:none;">
-        <source src="intro-music.mp4" type="video/mp4">
-    </video>
+    <!-- Intro Video (plays for 7 seconds on welcome) -->
+    <div id="introVideoOverlay" class="intro-video-overlay">
+        <video id="introMusic" autoplay muted playsinline>
+            <source src="intro-music.mp4" type="video/mp4">
+        </video>
+    </div>
 
     <!-- Background Music - Wedding Card (plays after intro) -->
     <audio id="bgMusic" loop>
@@ -1657,64 +1686,53 @@
             });
         });
 
-        // Music Control
-        const introMusic = document.getElementById('introMusic');
+        // Video & Music Control
+        const introVideo = document.getElementById('introMusic');
+        const introOverlay = document.getElementById('introVideoOverlay');
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         let isPlaying = false;
-        let introTimeout;
-        let musicStarted = false;
 
-        // Try to autoplay music on page load
-        function startMusic() {
-            if (musicStarted) return;
-            musicStarted = true;
-
-            // Play intro music first (for 7 seconds)
-            introMusic.volume = 0.6;
-            introMusic.play().then(() => {
+        // When video ends, hide overlay and play wedding music
+        introVideo.addEventListener('ended', function() {
+            introOverlay.classList.add('hidden');
+            bgMusic.volume = 0.5;
+            bgMusic.play().then(() => {
                 isPlaying = true;
                 musicBtn.classList.add('playing');
-                hideSoundPrompt();
-            }).catch(err => {
-                // Autoplay blocked - show tap prompt
-                showSoundPrompt();
-            });
+            }).catch(err => {});
+        });
 
-            // After 7 seconds, switch to wedding music
-            introTimeout = setTimeout(() => {
-                introMusic.pause();
-                introMusic.currentTime = 0;
+        // Also hide after 7 seconds in case video is longer
+        setTimeout(() => {
+            if (!introOverlay.classList.contains('hidden')) {
+                introOverlay.classList.add('hidden');
+                introVideo.pause();
                 bgMusic.volume = 0.5;
-                bgMusic.play().catch(err => {});
-            }, 7000);
-        }
+                bgMusic.play().then(() => {
+                    isPlaying = true;
+                    musicBtn.classList.add('playing');
+                }).catch(err => {});
+            }
+        }, 7500);
 
-        // Sound prompt for browsers that block autoplay
-        function showSoundPrompt() {
-            document.getElementById('soundPrompt').style.display = 'flex';
-        }
-
-        function hideSoundPrompt() {
-            document.getElementById('soundPrompt').style.display = 'none';
-        }
-
-        function enableSound() {
-            hideSoundPrompt();
-            musicStarted = false;
-            startMusic();
-        }
-
-        // Try autoplay on page load
+        // Try to play video on load
         window.addEventListener('load', () => {
-            setTimeout(startMusic, 500);
+            introVideo.play().catch(err => {
+                // If autoplay blocked, hide overlay immediately
+                introOverlay.classList.add('hidden');
+            });
+        });
+
+        // Allow tap to unmute/play
+        introOverlay.addEventListener('click', () => {
+            introVideo.muted = false;
+            introVideo.play();
         });
 
         function toggleMusic() {
             if (isPlaying) {
-                introMusic.pause();
                 bgMusic.pause();
-                clearTimeout(introTimeout);
                 isPlaying = false;
                 musicBtn.classList.remove('playing');
             } else {
