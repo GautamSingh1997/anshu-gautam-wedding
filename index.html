@@ -590,31 +590,48 @@
 
         /* Gallery Section */
         .gallery-section {
-            padding: 5rem 1.5rem;
+            padding: 5rem 0;
             background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
         }
 
+        .gallery-section .section-title {
+            padding: 0 1.5rem;
+        }
+
+        .gallery-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 10px 0 20px;
+        }
+
+        .gallery-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
         .gallery-grid {
-            max-width: 400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            display: flex;
+            gap: 15px;
+            padding: 0 1.5rem;
+            width: max-content;
         }
 
         .gallery-item {
             position: relative;
             border-radius: 15px;
             overflow: hidden;
-            aspect-ratio: 1;
+            width: 250px;
+            height: 300px;
+            flex-shrink: 0;
             box-shadow: 0 8px 25px rgba(139, 21, 56, 0.15);
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .gallery-item:first-child {
-            grid-column: span 2;
-            aspect-ratio: 16/10;
+            width: 280px;
         }
 
         .gallery-item:hover {
@@ -631,6 +648,24 @@
 
         .gallery-item:hover img {
             transform: scale(1.1);
+        }
+
+        .scroll-hint {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        .scroll-hint span {
+            animation: swipe-hint 1.5s ease infinite;
+            display: inline-block;
+        }
+
+        @keyframes swipe-hint {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
         }
 
         /* Lightbox */
@@ -1353,29 +1388,32 @@
         <section class="gallery-section">
             <h2 class="section-title">Our Moments</h2>
             
-            <div class="gallery-grid">
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(0)">
-                    <img src="photo1.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(1)">
-                    <img src="photo2.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(2)">
-                    <img src="photo3.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(3)">
-                    <img src="photo4.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(4)">
-                    <img src="photo5.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(5)">
-                    <img src="photo6.jpg" alt="Gautam & Anshu" loading="lazy">
-                </div>
-                <div class="gallery-item animate-on-scroll" onclick="openLightbox(6)">
-                    <img src="photo7.jpg" alt="Gautam & Anshu" loading="lazy">
+            <div class="gallery-scroll-container">
+                <div class="gallery-grid">
+                    <div class="gallery-item" onclick="openLightbox(0)">
+                        <img src="photo1.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(1)">
+                        <img src="photo2.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(2)">
+                        <img src="photo3.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(3)">
+                        <img src="photo4.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(4)">
+                        <img src="photo5.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(5)">
+                        <img src="photo6.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(6)">
+                        <img src="photo7.jpg" alt="Gautam & Anshu" loading="lazy">
+                    </div>
                 </div>
             </div>
+            <p class="scroll-hint"><span>← Swipe to see more →</span></p>
         </section>
 
         <!-- Lightbox Modal -->
