@@ -735,9 +735,172 @@
         .copy-feedback.show {
             opacity: 1;
         }
+
+        /* Music Control Button */
+        .music-btn {
+            position: fixed;
+            left: 20px;
+            bottom: 90px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(212, 168, 83, 0.4);
+            z-index: 999;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(212, 168, 83, 0.5);
+        }
+
+        .music-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-dark);
+        }
+
+        .music-btn.playing {
+            animation: music-pulse 1s ease infinite;
+        }
+
+        @keyframes music-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .music-btn .bar {
+            display: inline-block;
+            width: 3px;
+            height: 15px;
+            margin: 0 2px;
+            background: var(--primary-dark);
+            border-radius: 2px;
+            animation: sound-bar 0.5s ease infinite alternate;
+        }
+
+        .music-btn .bar:nth-child(1) { animation-delay: 0s; height: 10px; }
+        .music-btn .bar:nth-child(2) { animation-delay: 0.1s; height: 18px; }
+        .music-btn .bar:nth-child(3) { animation-delay: 0.2s; height: 12px; }
+        .music-btn .bar:nth-child(4) { animation-delay: 0.3s; height: 16px; }
+
+        @keyframes sound-bar {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1); }
+        }
+
+        .music-btn:not(.playing) .bar {
+            animation: none;
+            height: 3px !important;
+        }
+
+        /* Welcome Overlay */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--cream);
+            padding: 2rem;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .welcome-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-overlay .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .welcome-overlay h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold-light);
+        }
+
+        .welcome-overlay p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .welcome-overlay .enter-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--primary-dark);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .welcome-overlay .enter-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(212, 168, 83, 0.4);
+        }
+
+        .welcome-overlay .music-note {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .welcome-overlay .music-note span {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Welcome Overlay -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-icon">💕</div>
+        <h2>Gautam & Anshu</h2>
+        <p>Request the pleasure of your company</p>
+        <button class="enter-btn" onclick="enterSite()">
+            Open Invitation
+        </button>
+        <p class="music-note"><span>🎵</span> Tap to enter with music</p>
+    </div>
+
+    <!-- Music Control Button -->
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle Music">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </button>
+
     <!-- Desktop Warning -->
     <div class="desktop-warning">
         <div class="phone-icon">📱</div>
@@ -1038,6 +1201,35 @@
                 targetSection.scrollIntoView({ behavior: 'smooth' });
             });
         });
+
+        // Music Control
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
+        let isPlaying = false;
+
+        function enterSite() {
+            welcomeOverlay.classList.add('hidden');
+            bgMusic.volume = 0.5;
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+            }).catch(err => {
+                console.log('Autoplay prevented:', err);
+            });
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play();
+                isPlaying = true;
+                musicBtn.classList.add('playing');
+            }
+        }
 
         // Copy link function
         function copyLink() {
