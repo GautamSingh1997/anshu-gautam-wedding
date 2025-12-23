@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gautam & Anshu - Wedding Invitation</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #8B1538;
+            --primary-dark: #5C0D24;
+            --gold: #D4A853;
+            --gold-light: #E8C97A;
+            --cream: #FDF8F3;
+            --cream-dark: #F5EBE0;
+            --text-dark: #2D1810;
+            --text-light: #6B5347;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Desktop Warning */
+        .desktop-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: var(--cream);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .desktop-warning h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .desktop-warning p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 400px;
+        }
+
+        .desktop-warning .phone-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @media (min-width: 768px) {
+            .desktop-warning {
+                display: flex;
+            }
+            .main-content {
+                display: none;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(139, 21, 56, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 10px 40px rgba(139, 21, 56, 0.4);
+        }
+
+        .nav a {
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            opacity: 0.8;
+        }
+
+        .nav a:hover, .nav a.active {
+            opacity: 1;
+            color: var(--gold-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            position: relative;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(212, 168, 83, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(139, 21, 56, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .mandala {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .mandala-top {
+            top: -100px;
+            right: -100px;
+            animation: spin 60s linear infinite;
+        }
+
+        .mandala-bottom {
+            bottom: -100px;
+            left: -100px;
+            animation: spin 60s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .wedding-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--primary-dark);
+            padding: 8px 24px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .couple-names {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 1s ease 0.3s both;
+            line-height: 1.2;
+        }
+
+        .couple-names .amp {
+            display: block;
+            font-size: 2rem;
+            color: var(--gold);
+            margin: 0.3rem 0;
+        }
+
+        .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        .wedding-date {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 1s ease 0.7s both;
+        }
+
+        .wedding-venue {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.9s both;
+        }
+
+        .wedding-venue .location-icon {
+            color: var(--gold);
+        }
+
+        /* Countdown */
+        .countdown {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 1.1s both;
+        }
+
+        .countdown-item {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--cream);
+            padding: 15px 12px;
+            border-radius: 15px;
+            min-width: 65px;
+            box-shadow: 0 10px 30px rgba(139, 21, 56, 0.3);
+        }
+
+        .countdown-item .number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+        }
+
+        .countdown-item .label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s ease infinite;
+            color: var(--gold);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            margin-top: 8px;
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Couple Section */
+        .couple-section {
+            padding: 5rem 1.5rem;
+            background: linear-gradient(180deg, var(--cream-dark) 0%, var(--cream) 100%);
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '✦';
+            display: block;
+            color: var(--gold);
+            margin-top: 10px;
+            font-size: 1.2rem;
+        }
+
+        .couple-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+
+        .couple-card {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 15px 50px rgba(139, 21, 56, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .couple-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+        }
+
+        .couple-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .couple-card .name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .couple-card .role {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .couple-card .parents {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        .couple-card .parents strong {
+            color: var(--text-dark);
+        }
+
+        .hearts-connector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        /* Events Section */
+        .events-section {
+            padding: 5rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(212, 168, 83, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .events-section .section-title {
+            color: var(--cream);
+        }
+
+        .events-section .section-title::after {
+            color: var(--gold-light);
+        }
+
+        .events-timeline {
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(212, 168, 83, 0.3);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-card .event-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .event-card .event-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card .event-date {
+            font-size: 0.9rem;
+            color: var(--gold-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-card .event-venue {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .event-card .event-desc {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Journey Section */
+        .journey-section {
+            padding: 5rem 1.5rem;
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .journey-path {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .journey-place {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--primary-dark);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .journey-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: moveArrow 1s ease infinite;
+        }
+
+        @keyframes moveArrow {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .journey-desc {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 5rem 1.5rem;
+            background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+        }
+
+        .gallery-placeholder {
+            max-width: 350px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(139, 21, 56, 0.1);
+        }
+
+        .gallery-placeholder .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-placeholder p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            text-align: center;
+            color: var(--cream);
+        }
+
+        .footer .couple-names-footer {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer .hearts {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold-light);
+        }
+
+        .footer .message {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .footer .date-venue {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Animations on scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Decorative elements */
+        .decorative-flower {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Warning -->
+    <div class="desktop-warning">
+        <div class="phone-icon">📱</div>
+        <h2>Mobile Only</h2>
+        <p>This wedding invitation is designed exclusively for mobile devices. Please open this link on your smartphone for the best experience!</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Navigation -->
+        <nav class="nav">
+            <a href="#home" class="active">Home</a>
+            <a href="#events">Events</a>
+            <a href="#family">Family</a>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <!-- Decorative Mandalas -->
+            <svg class="mandala mandala-top" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="50" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <path d="M100,10 Q150,100 100,190 Q50,100 100,10" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <path d="M10,100 Q100,50 190,100 Q100,150 10,100" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            </svg>
+            <svg class="mandala mandala-bottom" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="50" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                <circle cx="100" cy="100" r="30" fill="none" stroke="currentColor" stroke-width="0.5"/>
+            </svg>
+
+            <div class="hero-content">
+                <div class="wedding-badge">Wedding Invitation</div>
+                
+                <h1 class="couple-names">
+                    Gautam
+                    <span class="amp">&</span>
+                    Anshu
+                </h1>
+                
+                <p class="tagline">We're Getting Married!</p>
+                
+                <p class="wedding-date">February 25, 2026</p>
+                <p class="wedding-venue">
+                    <span class="location-icon">📍</span> Madanpur, Gaya
+                </p>
+
+                <div class="countdown">
+                    <div class="countdown-item">
+                        <span class="number" id="days">00</span>
+                        <span class="label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="hours">00</span>
+                        <span class="label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="minutes">00</span>
+                        <span class="label">Mins</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="number" id="seconds">00</span>
+                        <span class="label">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-indicator">
+                Scroll Down
+                <span>↓</span>
+            </div>
+        </section>
+
+        <!-- Couple Section -->
+        <section id="family" class="couple-section">
+            <h2 class="section-title">The Couple</h2>
+            
+            <div class="couple-cards">
+                <div class="couple-card animate-on-scroll">
+                    <div class="icon">🤵🏻</div>
+                    <h3 class="name">Gautam Singh</h3>
+                    <p class="role">The Groom</p>
+                    <div class="parents">
+                        <strong>Son of</strong><br>
+                        Smt. Suneeta Devi<br>
+                        & Sri Dayanand Singh<br>
+                        <em style="color: var(--gold); margin-top: 5px; display: block;">Dubhal, Gaya</em>
+                    </div>
+                </div>
+
+                <div class="hearts-connector">
+                    💕 💍 💕
+                </div>
+
+                <div class="couple-card animate-on-scroll">
+                    <div class="icon">👰🏻</div>
+                    <h3 class="name">Anshu Singh</h3>
+                    <p class="role">The Bride</p>
+                    <div class="parents">
+                        <strong>Daughter of</strong><br>
+                        Smt. Prema Singh<br>
+                        & Sri Vikash Singh<br>
+                        <em style="color: var(--gold); margin-top: 5px; display: block;">Madanpur</em>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="events-section">
+            <h2 class="section-title">Wedding Events</h2>
+            
+            <div class="events-timeline">
+                <div class="event-card animate-on-scroll">
+                    <div class="event-icon">💍</div>
+                    <h3 class="event-name">Tilak</h3>
+                    <p class="event-date">Friday, February 20, 2026</p>
+                    <p class="event-venue">📍 Dubhal, Gaya</p>
+                    <p class="event-desc">The sacred tilak ceremony marking the formal engagement</p>
+                </div>
+
+                <div class="event-card animate-on-scroll">
+                    <div class="event-icon">🌺</div>
+                    <h3 class="event-name">Haldi</h3>
+                    <p class="event-date">Monday, February 23, 2026</p>
+                    <p class="event-venue">📍 Both Families</p>
+                    <p class="event-desc">Traditional haldi ceremony filled with turmeric, laughter, and blessings</p>
+                </div>
+
+                <div class="event-card animate-on-scroll">
+                    <div class="event-icon">💃🕺</div>
+                    <h3 class="event-name">Mehendi & Sangeet</h3>
+                    <p class="event-date">Tuesday, February 24, 2026</p>
+                    <p class="event-venue">📍 Madanpur</p>
+                    <p class="event-desc">An evening of beautiful mehendi, music, dance, and celebration</p>
+                </div>
+
+                <div class="event-card animate-on-scroll">
+                    <div class="event-icon">🕉️</div>
+                    <h3 class="event-name">Wedding Ceremony</h3>
+                    <p class="event-date">Wednesday, February 25, 2026</p>
+                    <p class="event-venue">📍 Madanpur</p>
+                    <p class="event-desc">Join us for the sacred wedding ceremony as we take our vows around the holy fire</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey Section -->
+        <section class="journey-section">
+            <h2 class="section-title">The Wedding Journey</h2>
+            
+            <div class="journey-path">
+                <div class="journey-place">🏠 Dubhal, Gaya</div>
+                <div class="journey-arrow">→</div>
+                <div class="journey-place">💒 Madanpur</div>
+            </div>
+            
+            <p class="journey-desc">
+                The baraat will travel from Dubhal, Gaya to Madanpur<br>
+                for the wedding celebration
+            </p>
+        </section>
+
+        <!-- Gallery Placeholder -->
+        <section class="gallery-section">
+            <h2 class="section-title">Our Moments</h2>
+            
+            <div class="gallery-placeholder animate-on-scroll">
+                <div class="icon">📸</div>
+                <p>Beautiful memories coming soon...</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="hearts">❤️ 💕 ❤️</div>
+            <h2 class="couple-names-footer">Gautam & Anshu</h2>
+            <p class="message">Thank you for being part of our special day</p>
+            <p class="date-venue">
+                February 25, 2026 | Madanpur, Gaya
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            const weddingDate = new Date('February 25, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Scroll Animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Active Nav Link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for nav links
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
+
