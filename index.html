@@ -1632,31 +1632,6 @@
             box-shadow: 0 0 30px rgba(212, 168, 83, 0.6);
         }
 
-        .auto-slideshow-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--gold);
-            color: var(--primary-dark);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .auto-slideshow-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(212, 168, 83, 0.4);
-        }
-
-        .auto-slideshow-btn.playing {
-            background: var(--primary);
-            color: var(--cream);
-        }
     </style>
 </head>
 <body>
@@ -1993,9 +1968,6 @@
                 </div>
             </div>
             <p class="scroll-hint"><span>← Swipe to see more →</span></p>
-            <button class="auto-slideshow-btn" id="slideshowBtn" onclick="toggleSlideshow()">
-                <span id="slideshowIcon">▶️</span> Auto Slideshow
-            </button>
         </section>
 
         <!-- Lightbox Modal -->
@@ -2494,33 +2466,27 @@
             setTimeout(() => trail.remove(), 1000);
         }
 
-        // ============ AUTO-SLIDESHOW ============
+        // ============ AUTO-SLIDESHOW (Automatic) ============
         let slideshowInterval = null;
         let slideshowActive = false;
         let slideshowIndex = 0;
         const galleryItems = document.querySelectorAll('.gallery-item');
         const galleryContainer = document.querySelector('.gallery-scroll-container');
+        const gallerySection = document.querySelector('.gallery-section');
 
-        function toggleSlideshow() {
-            const btn = document.getElementById('slideshowBtn');
-            const icon = document.getElementById('slideshowIcon');
-            
-            if (slideshowActive) {
-                // Stop slideshow
-                clearInterval(slideshowInterval);
-                slideshowActive = false;
-                btn.classList.remove('playing');
-                icon.textContent = '▶️';
-                galleryItems.forEach(item => item.classList.remove('active-slide'));
-            } else {
-                // Start slideshow
-                slideshowActive = true;
-                btn.classList.add('playing');
-                icon.textContent = '⏸️';
-                slideshowIndex = 0;
-                runSlideshow();
-                slideshowInterval = setInterval(runSlideshow, 3000);
-            }
+        function startAutoSlideshow() {
+            if (slideshowActive) return;
+            slideshowActive = true;
+            slideshowIndex = 0;
+            runSlideshow();
+            slideshowInterval = setInterval(runSlideshow, 3000);
+        }
+
+        function stopAutoSlideshow() {
+            if (!slideshowActive) return;
+            clearInterval(slideshowInterval);
+            slideshowActive = false;
+            galleryItems.forEach(item => item.classList.remove('active-slide'));
         }
 
         function runSlideshow() {
@@ -2538,9 +2504,6 @@
                     left: scrollLeft,
                     behavior: 'smooth'
                 });
-                
-                // Open lightbox for better view
-                openLightbox(slideshowIndex);
             }
             
             slideshowIndex++;
@@ -2549,18 +2512,20 @@
             }
         }
 
-        // Stop slideshow when lightbox is closed manually
-        const originalCloseLightbox = closeLightbox;
-        closeLightbox = function() {
-            if (slideshowActive) {
-                clearInterval(slideshowInterval);
-                slideshowActive = false;
-                document.getElementById('slideshowBtn').classList.remove('playing');
-                document.getElementById('slideshowIcon').textContent = '▶️';
-                galleryItems.forEach(item => item.classList.remove('active-slide'));
-            }
-            originalCloseLightbox();
-        };
+        // Auto-start slideshow when gallery section is visible
+        const galleryObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startAutoSlideshow();
+                } else {
+                    stopAutoSlideshow();
+                }
+            });
+        }, { threshold: 0.3 });
+
+        if (gallerySection) {
+            galleryObserver.observe(gallerySection);
+        }
     </script>
 </body>
 </html>
