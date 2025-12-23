@@ -1410,12 +1410,6 @@
                     <div class="gallery-item" onclick="openLightbox(4)">
                         <img src="photo5.jpg" alt="Gautam & Anshu" loading="lazy">
                     </div>
-                    <div class="gallery-item" onclick="openLightbox(5)">
-                        <img src="photo6.jpg" alt="Gautam & Anshu" loading="lazy">
-                    </div>
-                    <div class="gallery-item" onclick="openLightbox(6)">
-                        <img src="photo7.jpg" alt="Gautam & Anshu" loading="lazy">
-                    </div>
                 </div>
             </div>
             <p class="scroll-hint"><span>← Swipe to see more →</span></p>
@@ -1427,7 +1421,7 @@
             <button class="lightbox-nav lightbox-prev" onclick="changeSlide(-1)">❮</button>
             <img src="" alt="Gallery Image" id="lightboxImg">
             <button class="lightbox-nav lightbox-next" onclick="changeSlide(1)">❯</button>
-            <p class="lightbox-counter"><span id="currentSlide">1</span> / 7</p>
+            <p class="lightbox-counter"><span id="currentSlide">1</span> / 5</p>
         </div>
 
         <!-- Share Section -->
@@ -1618,7 +1612,7 @@
         }
 
         // Lightbox Gallery
-        const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg', 'photo6.jpg', 'photo7.jpg'];
+        const photos = ['photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg'];
         let currentIndex = 0;
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
