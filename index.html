@@ -592,17 +592,27 @@
         .side-events {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease;
+            transition: max-height 0.6s ease, opacity 0.3s ease, padding 0.3s ease;
             opacity: 0;
+            padding: 0;
         }
 
         .side-events.show {
-            max-height: 500px;
+            max-height: 1000px;
             opacity: 1;
+            padding: 10px 0;
         }
 
         .side-events .event-card {
             margin-bottom: 1rem;
+            padding: 2rem;
+        }
+
+        .side-events .event-card .event-name,
+        .side-events .event-card .event-date,
+        .side-events .event-card .event-venue,
+        .side-events .event-card .event-desc {
+            display: block;
         }
 
         .side-events.groom-events .event-card {
