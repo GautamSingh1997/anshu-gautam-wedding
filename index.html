@@ -933,6 +933,36 @@
             opacity: 1;
         }
 
+        /* Sound Prompt */
+        .sound-prompt {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--primary-dark);
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 1001;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(212, 168, 83, 0.4);
+            animation: pulse-prompt 2s ease infinite;
+        }
+
+        .sound-prompt .sound-icon {
+            font-size: 1.2rem;
+        }
+
+        @keyframes pulse-prompt {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
         /* Music Control Button */
         .music-btn {
             position: fixed;
@@ -1139,6 +1169,12 @@
         <source src="wedding-card.mp3" type="audio/mpeg">
     </audio>
 
+
+    <!-- Sound Prompt (shows if autoplay blocked) -->
+    <div id="soundPrompt" class="sound-prompt" style="display:none;" onclick="enableSound()">
+        <span class="sound-icon">🔊</span>
+        <span>Tap for music</span>
+    </div>
 
     <!-- Music Control Button -->
     <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle Music">
@@ -1514,7 +1550,7 @@
         let introTimeout;
         let musicStarted = false;
 
-        // Start music on first user interaction
+        // Try to autoplay music on page load
         function startMusic() {
             if (musicStarted) return;
             musicStarted = true;
@@ -1524,13 +1560,10 @@
             introMusic.play().then(() => {
                 isPlaying = true;
                 musicBtn.classList.add('playing');
+                hideSoundPrompt();
             }).catch(err => {
-                // If intro fails, try wedding music directly
-                bgMusic.volume = 0.5;
-                bgMusic.play().then(() => {
-                    isPlaying = true;
-                    musicBtn.classList.add('playing');
-                });
+                // Autoplay blocked - show tap prompt
+                showSoundPrompt();
             });
 
             // After 7 seconds, switch to wedding music
@@ -1538,19 +1571,29 @@
                 introMusic.pause();
                 introMusic.currentTime = 0;
                 bgMusic.volume = 0.5;
-                bgMusic.play().catch(err => {
-                    console.log('Background music error:', err);
-                });
+                bgMusic.play().catch(err => {});
             }, 7000);
-
-            // Remove listener after first interaction
-            document.removeEventListener('click', startMusic);
-            document.removeEventListener('touchstart', startMusic);
         }
 
-        // Listen for first interaction
-        document.addEventListener('click', startMusic);
-        document.addEventListener('touchstart', startMusic);
+        // Sound prompt for browsers that block autoplay
+        function showSoundPrompt() {
+            document.getElementById('soundPrompt').style.display = 'flex';
+        }
+
+        function hideSoundPrompt() {
+            document.getElementById('soundPrompt').style.display = 'none';
+        }
+
+        function enableSound() {
+            hideSoundPrompt();
+            musicStarted = false;
+            startMusic();
+        }
+
+        // Try autoplay on page load
+        window.addEventListener('load', () => {
+            setTimeout(startMusic, 500);
+        });
 
         function toggleMusic() {
             if (isPlaying) {
@@ -1560,7 +1603,6 @@
                 isPlaying = false;
                 musicBtn.classList.remove('playing');
             } else {
-                // Resume with wedding music
                 bgMusic.play();
                 isPlaying = true;
                 musicBtn.classList.add('playing');
